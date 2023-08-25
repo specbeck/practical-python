@@ -36,8 +36,16 @@ def read_prices(filename):
     return stocks
 
 
-# portfolio = read_portfolio("Data/portfolio.csv")
-# pprint(portfolio)
+portfolio = read_portfolio("Data/portfolio.csv")
+prices = read_prices("Data/prices.csv")
 
-prices = read_prices('Data/prices.csv')
-pprint(prices)
+total_cost = 0.0
+for s in portfolio:
+    total_cost += s["shares"] * s["price"]
+
+current_value = 0.0
+for s in portfolio:
+    current_value += s["shares"] * prices[s["name"]]
+
+print("Current value: ", current_value)
+print(f"Total loss/gain: {current_value - total_cost}")
