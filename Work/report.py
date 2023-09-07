@@ -36,16 +36,36 @@ def read_prices(filename):
     return stocks
 
 
+def make_report(stocks, prices):
+    report = []
+    for stock in stocks:
+        stock_name = stock['name']
+        if stock_name in prices.keys():
+            change = prices[stock_name] - stock['price']
+            tup = (stock_name, stock['shares'], prices[stock_name], change)
+            report.append(tup)
+    return report
+
+
 portfolio = read_portfolio("Data/portfolio.csv")
 prices = read_prices("Data/prices.csv")
 
-total_cost = 0.0
-for s in portfolio:
-    total_cost += s["shares"] * s["price"]
+report = make_report(portfolio, prices)
 
-current_value = 0.0
-for s in portfolio:
-    current_value += s["shares"] * prices[s["name"]]
+# total_cost = 0.0
+# for s in portfolio:
+#     total_cost += s["shares"] * s["price"]
 
-print("Current value: ", current_value)
-print(f"Total loss/gain: {current_value - total_cost}")
+# current_value = 0.0
+# for s in portfolio:
+#     current_value += s["shares"] * prices[s["name"]]
+
+# print("Current value: ", current_value)
+# print(f"Total loss/gain: {current_value - total_cost}")
+
+headers = ('Name', 'Shares', 'Price', 'Change')
+print('%10s %10s %10s %10s' % headers)
+print(('-' * 10 + ' ') * len(headers))
+for name, shares, price, change in report:
+    price = f'${price:.2f}'
+    print(f'{name:>10s} {shares:>10d} {price:>10s} {change:>10.2f}')
