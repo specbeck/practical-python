@@ -1,8 +1,14 @@
+#!/usr/bin/env python
 # report.py
 #
 # Exercise 2.4
-import csv
 from fileparse import parse_csv
+
+
+def main(args):
+    if len(args) != 3:
+        raise SystemExit("Usage: %s portfile pricefile" % args[0])
+    portfolio_report(args[1], args[2])
 
 
 def read_portfolio(filename):
@@ -82,4 +88,7 @@ def portfolio_report(portfolio_filename, prices_filename):
     print_report(report)
 
 
-# portfolio_report('Data/portfolio.csv', 'Data/prices.csv')
+if __name__ == "__main__":
+    import sys
+
+    main(sys.argv)
