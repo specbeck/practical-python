@@ -2,7 +2,7 @@
 #
 # Exercise 2.4
 import csv
-from pprint import pprint
+from fileparse import parse_csv
 
 
 def read_portfolio(filename):
@@ -10,41 +10,20 @@ def read_portfolio(filename):
     Read a stock portfolio file into a list of dictionaries with keys
     name, shares, and price.
     """
-    portfolio = []
-
-    with open(filename, "rt") as f:
-        rows = csv.reader(f)
-        headers = next(rows)
-
-        for row in rows:
-            holding = dict(zip(headers, row))
-
-            holding["shares"] = int(holding["shares"])
-            holding["price"] = float(holding["price"])
-
-            portfolio.append(holding)
-
-    return portfolio
+    return parse_csv(
+        filename, select=["name", "shares", "price"], types=[str, int, float]
+    )
 
 
 def read_prices(filename):
     """
     Read a CSV file of price data into a dict mapping names to prices.
     """
-    stocks = {}
-
-    with open(filename, "rt") as f:
-        rows = csv.reader(f)
-        for row in rows:
-            if row == []:
-                continue
-            stocks[row[0]] = float(row[1])
-
-    return stocks
+    return dict(parse_csv(filename, types=[str, float], has_headers=False))
 
 
 def get_cost(portfolio):
-    """ Get the total cost of a portfolio."""
+    """Get the total cost of a portfolio."""
     total_cost = 0.0
     for s in portfolio:
         total_cost += s["shares"] * s["price"]
@@ -52,7 +31,7 @@ def get_cost(portfolio):
 
 
 def get_current_value(portfolio, prices):
-    """ Get the current value of stocks in a portfolio based on prices."""
+    """Get the current value of stocks in a portfolio based on prices."""
     current_value = 0.0
     for s in portfolio:
         current_value += s["shares"] * prices[s["name"]]
@@ -102,4 +81,5 @@ def portfolio_report(portfolio_filename, prices_filename):
 
     print_report(report)
 
-portfolio_report('Data/portfolio.csv', 'Data/prices.csv')
+
+# portfolio_report('Data/portfolio.csv', 'Data/prices.csv')
