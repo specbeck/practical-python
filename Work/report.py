@@ -8,7 +8,7 @@ import tableformat
 
 def main(args):
     if len(args) < 3:
-        raise SystemExit("Usage: %s portfile pricefile" % args[0])
+        raise SystemExit("Usage: %s portfile pricefile [format]" % args[0])
     if len(args) == 4:
         portfolio_report(args[1], args[2], fmt=args[3])
     else:

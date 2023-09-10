@@ -44,16 +44,20 @@ class HTMLTableFormatter(TableFormatter):
     """Output portfolio data in HTML"""
 
     def headings(self, headers):
-        print("<tr>", sep="", end="")
+        print("<tr>", end="")
         for h in headers:
-            print(f"<th>{h}</th>", sep="", end="")
-        print("</tr>", sep="")
+            print(f"<th>{h}</th>", end="")
+        print("</tr>")
 
     def row(self, rowdata):
-        print("<tr>", sep="", end="")
+        print("<tr>", end="")
         for r in rowdata:
-            print(f"<td>{r}</td>", sep="", end="")
-        print("</tr>", sep="")
+            print(f"<td>{r}</td>", end="")
+        print("</tr>")
+
+
+class FormatError(Exception):
+    pass
 
 
 def create_formatter(name):
@@ -65,4 +69,12 @@ def create_formatter(name):
     elif name == "html":
         return HTMLTableFormatter()
     else:
-        raise RuntimeError(f"Unknown format {name}")
+        raise FormatError(f"Unknown table format {name}")
+
+
+def print_table(portfolio, select, formatter):
+    """Format a table with selected columns"""
+    formatter.headings(select)
+    for stock in portfolio:
+        rowdata = [str(getattr(stock, col)) for col in select]
+        formatter.row(rowdata)
