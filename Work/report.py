@@ -3,6 +3,7 @@
 #
 # Exercise 2.4
 from fileparse import parse_csv
+import stock
 
 
 def main(args):
@@ -13,13 +14,14 @@ def main(args):
 
 def read_portfolio(filename):
     """
-    Read a stock portfolio file into a list of dictionaries with keys
+    Read a stock portfolio file into a list of objects with attributes
     name, shares, and price.
     """
     with open(filename) as file:
-        return parse_csv(
+        dicts = parse_csv(
             file, select=["name", "shares", "price"], types=[str, int, float]
         )
+    return [stock.Stock(s["name"], s["shares"], s["price"]) for s in dicts]
 
 
 def read_prices(filename):
@@ -34,7 +36,7 @@ def get_cost(portfolio):
     """Get the total cost of a portfolio."""
     total_cost = 0.0
     for s in portfolio:
-        total_cost += s["shares"] * s["price"]
+        total_cost += s.shares * s.price
     return total_cost
 
 
@@ -42,7 +44,7 @@ def get_current_value(portfolio, prices):
     """Get the current value of stocks in a portfolio based on prices."""
     current_value = 0.0
     for s in portfolio:
-        current_value += s["shares"] * prices[s["name"]]
+        current_value += s.shares * prices[s.name]
     return current_value
 
 
@@ -53,10 +55,10 @@ def make_report(stocks, prices):
     """
     report = []
     for stock in stocks:
-        stock_name = stock["name"]
+        stock_name = stock.name
         if stock_name in prices.keys():
-            change = prices[stock_name] - stock["price"]
-            tup = (stock_name, stock["shares"], prices[stock_name], change)
+            change = prices[stock_name] - stock.price
+            tup = (stock_name, stock.shares, prices[stock_name], change)
             report.append(tup)
     return report
 
