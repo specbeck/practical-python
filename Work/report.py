@@ -5,6 +5,7 @@
 from fileparse import parse_csv
 import stock
 import tableformat
+from portfolio import Portfolio
 
 def main(args):
     if len(args) < 3:
@@ -23,7 +24,8 @@ def read_portfolio(filename):
         dicts = parse_csv(
             file, select=["name", "shares", "price"], types=[str, int, float]
         )
-    return [stock.Stock(s["name"], s["shares"], s["price"]) for s in dicts]
+    portfolio = [ stock.Stock(s["name"], s["shares"], s["price"]) for s in dicts]
+    return Portfolio(portfolio)
 
 
 def read_prices(filename):
