@@ -7,6 +7,7 @@ import stock
 import tableformat
 from portfolio import Portfolio
 
+
 def main(args):
     if len(args) < 3:
         raise SystemExit("Usage: %s portfile pricefile [format]" % args[0])
@@ -15,17 +16,14 @@ def main(args):
     else:
         portfolio_report(args[1], args[2])
 
+
 def read_portfolio(filename, **opts):
     """
     Read a stock portfolio file into a list of objects with attributes
     name, shares, and price.
     """
-    with open(filename) as file:
-        dicts = parse_csv(
-            file, select=["name", "shares", "price"], types=[str, int, float], **opts
-        )
-    portfolio = [ stock.Stock(**s) for s in dicts]
-    return Portfolio(portfolio)
+    with open(filename) as lines:
+        return Portfolio.from_csv(lines, **opts)
 
 
 def read_prices(filename):
@@ -71,12 +69,13 @@ def print_report(reportdata, formatter):
     """
     Print a nicely formated table from a list of (name, shares, price, change) tuples.
     """
-    formatter.headings(['Name','Shares','Price','Change'])
+    formatter.headings(["Name", "Shares", "Price", "Change"])
     for name, shares, price, change in reportdata:
-        rowdata = [ name, str(shares), f'{price:0.2f}', f'{change:0.2f}' ]
+        rowdata = [name, str(shares), f"{price:0.2f}", f"{change:0.2f}"]
         formatter.row(rowdata)
 
-def portfolio_report(portfolio_filename, prices_filename, fmt='txt'):
+
+def portfolio_report(portfolio_filename, prices_filename, fmt="txt"):
     """
     Make a stock report given portfolio and price data files.
     """
