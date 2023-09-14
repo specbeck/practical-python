@@ -10,7 +10,7 @@ def parse_csv(
     types=None,
     has_headers=True,
     delimiter=",",
-    silence_errors=True,
+    silence_errors=False,
 ):
     """
     Parse a CSV file into a list of records
@@ -49,7 +49,8 @@ def parse_csv(
             except Exception as e:
                 if not silence_errors:
                     print(f"Row {rowno}: Couldn't convert {row}")
-                    print(f"Row {rowno}: {e}")
+                    print(f"Row {rowno}: Reason {e}")
+                continue
 
         # If no headers append the tuple
         if has_headers:

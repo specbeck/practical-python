@@ -15,16 +15,16 @@ def main(args):
     else:
         portfolio_report(args[1], args[2])
 
-def read_portfolio(filename):
+def read_portfolio(filename, **opts):
     """
     Read a stock portfolio file into a list of objects with attributes
     name, shares, and price.
     """
     with open(filename) as file:
         dicts = parse_csv(
-            file, select=["name", "shares", "price"], types=[str, int, float]
+            file, select=["name", "shares", "price"], types=[str, int, float], **opts
         )
-    portfolio = [ stock.Stock(s["name"], s["shares"], s["price"]) for s in dicts]
+    portfolio = [ stock.Stock(**s) for s in dicts]
     return Portfolio(portfolio)
 
 
