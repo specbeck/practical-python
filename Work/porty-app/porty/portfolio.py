@@ -1,6 +1,5 @@
 # portfolio.py
-import stock
-import fileparse
+from . import stock, fileparse
 
 
 class Portfolio:

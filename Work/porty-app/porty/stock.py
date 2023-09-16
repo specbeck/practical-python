@@ -1,4 +1,4 @@
-from typedproperty import String, Integer, Float
+from .typedproperty import String, Integer, Float
 
 class Stock:
     """A Stock holding instance having attributes name, shares and price."""
