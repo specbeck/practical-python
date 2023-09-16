@@ -2,7 +2,8 @@
 #
 # Exercise 3.3
 import csv
-
+import logging
+log = logging.getLogger(__name__)
 
 def parse_csv(
     lines,
@@ -48,8 +49,8 @@ def parse_csv(
                 row = [func(val) for func, val in zip(types, row)]
             except Exception as e:
                 if not silence_errors:
-                    print(f"Row {rowno}: Couldn't convert {row}")
-                    print(f"Row {rowno}: Reason {e}")
+                    log.warning(f"Row {rowno}: Couldn't convert {row}")
+                    log.debug(f"Row {rowno}: Reason {e}")
                 continue
 
         # If no headers append the tuple
